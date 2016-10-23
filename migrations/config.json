@@ -1,0 +1,11 @@
+{
+    "type"               : "mysql",
+
+    "username"           : "root",
+    "password"           : "root",
+    "host"               : "localhost",
+    "port"               : 3306,
+
+    "revision_db_name"   : "recog_revision",
+    "history_table_name" : "recog_api_history"
+}

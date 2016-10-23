@@ -1,0 +1,6 @@
+# Build artifacts
+target/
+
+# Editors
+rusty-tags.vi
+*.swp
