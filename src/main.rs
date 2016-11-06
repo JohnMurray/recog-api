@@ -1,45 +1,21 @@
-extern crate iron;
 extern crate env_logger;
+extern crate iron;
 extern crate log;
 extern crate logger;
 #[macro_use]
 extern crate mysql;
+extern crate router;
+extern crate rustc_serialize;
 
 mod middleware;
 mod user;
 mod auth;
 
 use iron::prelude::*;
-use iron::status;
-use iron::{Handler};
 use logger::Logger;
 use middleware::mysqlpool::*;
 use mysql as my;
-use std::collections::HashMap;
-use user::User;
-
-struct Router {
-    routes: HashMap<String, Box<Handler>>,
-}
-
-impl Router {
-    fn new() -> Self {
-        Router { routes: HashMap::new() }
-    }
-
-    fn add_route<H>(&mut self, path: String, handler: H) where H: Handler {
-        self.routes.insert(path, Box::new(handler));
-    }
-}
-
-impl Handler for Router {
-    fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        match self.routes.get(&req.url.path().join("/")) {
-            Some(handler) => handler.handle(req),
-            None          => Ok(Response::with(status::NotFound))
-        }
-    }
-}
+use router::Router;
 
 fn main() {
     // Initialize logging
@@ -48,8 +24,8 @@ fn main() {
     // Initialize router and routes
     let mut router = Router::new();
 
-    router.add_route("auth".to_string(), auth::auth_handler);
-    router.add_route("user".to_string(), auth::user_handler);
+    router.get("/auth", auth::auth_handler, "auth");
+    router.get("/user", auth::user_handler, "user");
 
 
     // Setup Middleware
@@ -63,7 +39,6 @@ fn main() {
     chain.link_before(logger_before);
     chain.link_before(db_middleware);
     chain.link_after(logger_after);
-
 
 
     // Configure and launch server

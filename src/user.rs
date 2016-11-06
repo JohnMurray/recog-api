@@ -1,5 +1,6 @@
 use mysql as my;
 
+#[derive(RustcDecodable, RustcEncodable)]
 pub struct User {
     id: u32,
     name: String,
@@ -23,7 +24,7 @@ impl User {
         // lookup result is a Result
         lookup_result.ok().and_then(|mut result| {
             // next returns Option<MyResult<Row>>
-            result.next().and_then(|mut maybe_row| {
+            result.next().and_then(|maybe_row| {
                 // convert MyResult<Row> to Option<Row>
                 maybe_row.ok().map(|mut row| {
                     User {
