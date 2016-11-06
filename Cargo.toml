@@ -4,6 +4,12 @@ version = "0.1.0"
 authors = ["John Murray <me@johnmurray.io>"]
 
 [dependencies]
+mysql = "*"
+log = "0.3"
+env_logger = "0.3"
 
 [dependencies.iron]
 version = "*"
+
+[dependencies.logger]
+git = "https://github.com/iron/logger.git"
